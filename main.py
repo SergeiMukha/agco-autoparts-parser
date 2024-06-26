@@ -62,7 +62,7 @@ def get_data(driver: webdriver.Chrome):
 
 def download_photo(link):
     img_data = requests.get(link).content
-    with open('image_test.jpg', 'wb') as handler:
+    with open('images/image_test.jpg', 'wb') as handler:
         handler.write(img_data)
 
 
