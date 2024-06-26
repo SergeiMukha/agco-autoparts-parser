@@ -2,6 +2,7 @@ import requests
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -14,6 +15,15 @@ marks_image_links = {
     "https://parts.agcocorp.com/medias/?context=bWFzdGVyfHJvb3R8NTc3OXxpbWFnZS9wbmd8aGJkL2g5Ny84ODA2MjM4MTU4ODc4LnBuZ3w0Y2JkNDAzZGUzMDliYmU2OTU3N2U3Y2ZlOGMxNTU0ODRkYTA4YThlNzFjOWQyODVmMWJlZDk1M2Q2NDc2ZTlh": "Valtra",
     "https://parts.agcocorp.com/medias/Gleaner-140-50.png?context=bWFzdGVyfHJvb3R8MTM0MnxpbWFnZS9wbmd8aDc2L2gzOS84OTQyOTA3Nzg1MjQ2LnBuZ3w1OTE1ZTMwZWY1ZTM3OTU5N2Q1NmU1YjM4OTQ2MjE0YmYxZDlmZGI1OWFlMmZmOTE4ZjYyOTU5YThjZWM1MGJk": "Gleaner"
 }
+
+
+# Get page to parse
+def get_art_page(driver: webdriver.Chrome, art: str):
+    search_input = driver.find_element(By.ID, "js-site-search-input")
+    search_input.send_keys(art)
+
+    search_input.send_keys(Keys.ENTER)
+
 
 # Returns necessary data from the page
 def get_data(driver: webdriver.Chrome, art: str):

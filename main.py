@@ -5,14 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-from page_parser import get_data
-
-
-def get_art_page(driver: webdriver.Chrome, art: str):
-    search_input = driver.find_element(By.ID, "js-site-search-input")
-    search_input.send_keys(art)
-
-    search_input.send_keys(Keys.ENTER)
+from page_parser import get_data, get_art_page
 
 
 def start_parser(driver: webdriver.Chrome):
