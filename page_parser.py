@@ -70,7 +70,7 @@ def get_data(driver: webdriver.Chrome, art: str):
     for box in mark_boxes:
         
         mark_image_link = box.find_element(By.TAG_NAME, "img").get_attribute("src")
-        mark_name = marks_image_links[mark_image_link] or None
+        mark_name = marks_image_links[mark_image_link] if mark_image_link in marks_image_links.keys() else None
         if mark_name:
             if marks == "":
                 marks = mark_name
@@ -94,7 +94,7 @@ def get_data(driver: webdriver.Chrome, art: str):
 def parse_page(driver: webdriver.Chrome, art: str):
     get_art_page(driver=driver, art=art)
 
-    time.sleep(random.randint(3, 5))
+    time.sleep(random.randint(1, 3))
 
     data: dict = get_data(driver=driver, art=art)
 
