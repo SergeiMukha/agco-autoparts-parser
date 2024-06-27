@@ -3,7 +3,7 @@ import random
 
 from selenium import webdriver
 
-from page_parser import get_data, get_art_page, start_parser
+from page_parser import parse_page, start_parser
 from excel_controller import ExcelController
 
 
@@ -27,11 +27,13 @@ def main():
         art = str(excelController.sheet[f"A{excelController.row}"].value).replace("-", "").replace(",", "")
         print(excelController.row, art)
 
-        get_art_page(driver=driver, art=art)
+        data: dict = parse_page(driver=driver, art=art)
+        if data == { "marks": "", "models": "", "img": "" }:
+            driver.get("https://parts.agcocorp.com/us/en")
 
-        time.sleep(random.randint(3, 5))
+            data: dict = parse_page(driver=driver, art=art)
 
-        data: dict = get_data(driver=driver, art=art)
+        driver.get("https://parts.agcocorp.com/pl/pl")
         
         excelController.sheet[f"B{excelController.row}"] = data["marks"]
         excelController.sheet[f"C{excelController.row}"] = data["models"]

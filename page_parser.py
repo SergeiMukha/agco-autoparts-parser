@@ -1,4 +1,6 @@
 import requests
+import time
+import random
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -88,6 +90,15 @@ def get_data(driver: webdriver.Chrome, art: str):
         "img": img_link
     }
 
+
+def parse_page(driver: webdriver.Chrome, art: str):
+    get_art_page(driver=driver, art=art)
+
+    time.sleep(random.randint(3, 5))
+
+    data: dict = get_data(driver=driver, art=art)
+
+    return data
 
 # Downloads photo from the page
 def download_photo(link: str, filename: str):
