@@ -24,7 +24,7 @@ def main():
 
     # Iterate arts by rows parse data of this arts and update the document
     while excelController.row <= max_row:
-        art = str(excelController.sheet[f"A{excelController.row}"].value).replace("-", "").replace(",", "")
+        art = str(excelController.sheet[f"A{excelController.row}"].value).replace(",", "")
         print(excelController.row, art)
 
         data: dict = parse_page(driver=driver, art=art)
@@ -45,7 +45,7 @@ def main():
 
         save_current_row(excelController.row)
 
-        time.sleep(random.randint(3, 5))
+        time.sleep(random.randint(3, 6))
 
 if __name__ == "__main__":
     main()

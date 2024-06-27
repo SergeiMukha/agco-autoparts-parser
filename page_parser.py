@@ -53,7 +53,7 @@ def get_data(driver: webdriver.Chrome, art: str):
     if img_link == "https://parts.agcocorp.com//_ui/responsive/theme-agco/images/common/missing_image_450x450.JPG":
         img_link = ""
     else:
-        download_photo(img_link, art)
+        download_photo(img_link.replace("/", "-"), art)
 
     try: WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "oemTextDiv")))
     except TimeoutException: return { "marks": "", "models": "", "img": img_link }
