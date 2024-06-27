@@ -28,7 +28,7 @@ def main():
         print(excelController.row, art)
 
         data: dict = parse_page(driver=driver, art=art)
-        if data["marks"] == "" and data["models"] = "":
+        if data["marks"] == "" and data["models"] == "":
             driver.get("https://parts.agcocorp.com/us/en")
 
             data: dict = parse_page(driver=driver, art=art)

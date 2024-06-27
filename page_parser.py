@@ -55,7 +55,7 @@ def get_data(driver: webdriver.Chrome, art: str):
     else:
         download_photo(img_link, art.replace("/", "-"))
 
-    try: WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "oemTextDiv")))
+    try: WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "oemTextDiv")))
     except TimeoutException: return { "marks": "", "models": "", "img": img_link }
 
     try: marks_container = driver.find_element(By.ID, "suitable-for")
