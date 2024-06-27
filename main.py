@@ -45,7 +45,7 @@ def main():
 
         save_current_row(excelController.row)
 
-        time.sleep(random.randint(3, 6))
+        time.sleep(random.randint(1, 4))
 
 if __name__ == "__main__":
     main()
