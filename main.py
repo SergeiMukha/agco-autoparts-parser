@@ -33,7 +33,7 @@ def main():
 
             data: dict = parse_page(driver=driver, art=art)
 
-        driver.get("https://parts.agcocorp.com/pl/pl")
+            driver.get("https://parts.agcocorp.com/pl/pl")
         
         excelController.sheet[f"B{excelController.row}"] = data["marks"]
         excelController.sheet[f"C{excelController.row}"] = data["models"]
