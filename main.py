@@ -2,30 +2,48 @@ import time
 import random
 
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 
-from page_parser import get_data, get_art_page
+from page_parser import get_data, get_art_page, start_parser
+from excel_controller import ExcelController
 
 
-def start_parser(driver: webdriver.Chrome):
-    driver.get("https://parts.agcocorp.com/pl/pl")
+def save_current_row(row):
+    with open("current_row.txt", "w") as f:
+        f.write(str(row))
 
-    accept_cookie_button = driver.find_element(By.ID, "truste-consent-button")
-    accept_cookie_button.click()
+def get_current_row():
+    with open("current_row.txt") as f:
+        return int(f.read())
 
 
 def main():
-    driver: webdriver.Chrome = webdriver.Chrome()
+    driver: webdriver.Chrome = start_parser()
 
-    start_parser(driver=driver)
+    excelController = ExcelController("Agco.xlsx", get_current_row())
+    max_row = excelController.max_row
 
-    get_art_page(driver=driver, art="3788718M1")
+    # Iterate arts by rows parse data of this arts and update the document
+    while excelController.row <= max_row:
+        art = str(excelController.sheet[f"A{excelController.row}"].value).replace("-", "").replace(",", "")
+        print(excelController.row, art)
 
-    time.sleep(random.randint(3, 5))
+        get_art_page(driver=driver, art=art)
 
-    data = get_data(driver=driver, art="3788718M1")
-    print(data)
+        time.sleep(random.randint(3, 5))
+
+        data: dict = get_data(driver=driver, art=art)
+        
+        excelController.sheet[f"B{excelController.row}"] = data["marks"]
+        excelController.sheet[f"C{excelController.row}"] = data["models"]
+        excelController.sheet[f"D{excelController.row}"] = "" if data["img"] else "Пусто"
+
+        excelController.save_document()
+
+        excelController.row += 1
+
+        save_current_row(excelController.row)
+
+        time.sleep(random.randint(3, 5))
 
 if __name__ == "__main__":
     main()

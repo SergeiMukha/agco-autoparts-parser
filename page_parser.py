@@ -17,9 +17,22 @@ marks_image_links = {
 }
 
 
+# Function to accept cookies
+def start_parser():
+    driver: webdriver.Chrome = webdriver.Chrome()
+
+    driver.get("https://parts.agcocorp.com/pl/pl")
+
+    accept_cookie_button = driver.find_element(By.ID, "truste-consent-button")
+    accept_cookie_button.click()
+
+    return driver
+
+
 # Get page to parse
 def get_art_page(driver: webdriver.Chrome, art: str):
     search_input = driver.find_element(By.ID, "js-site-search-input")
+    search_input.clear()
     search_input.send_keys(art)
 
     search_input.send_keys(Keys.ENTER)
@@ -31,13 +44,20 @@ def get_data(driver: webdriver.Chrome, art: str):
         marks_button = driver.find_element(By.CLASS_NAME, "nav-pills").find_element(By.CLASS_NAME, "d-sm-block")
         marks_button.click()
     except NoSuchElementException:
-        return { "marks": "", "models": "" }
+        return { "marks": "", "models": "", "img": "" }
+
+    # Get image: if it's available then leave the img_string empty if not then write Пусто
+    img_link = driver.find_element(By.CLASS_NAME, "lazyOwl").get_attribute("src")
+    if img_link == "https://parts.agcocorp.com//_ui/responsive/theme-agco/images/common/missing_image_450x450.JPG":
+        img_link = ""
+    else:
+        download_photo(img_link, art)
 
     try: WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "oemTextDiv")))
-    except TimeoutException: return { "marks": "", "models": "" } 
+    except TimeoutException: return { "marks": "", "models": "", "img": img_link }
 
     try: marks_container = driver.find_element(By.ID, "suitable-for")
-    except NoSuchElementException: return { "marks": "", "models": "" }    
+    except NoSuchElementException: return { "marks": "", "models": "", "img": img_link }
 
     # Fill strings with marks and models
     models_full_string = ""
@@ -61,19 +81,11 @@ def get_data(driver: webdriver.Chrome, art: str):
                 models_full_string = models.text
             else:
                 models_full_string+=f", {models.text}"
-
-    # Get image: if it's available then leave the img_string empty if not then write Пусто
-    img_string = ""
-    try:
-        img_link = driver.find_element(By.CLASS_NAME, "lazyOwl").get_attribute("src")
-        download_photo(img_link, art)
-    except NoSuchElementException:
-        img_string = "Пусто"
     
     return {
         "marks": marks,
         "models": models_full_string,
-        "img": img_string
+        "img": img_link
     }
 
 
